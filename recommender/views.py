@@ -33,7 +33,7 @@ def startup():
 
 _state = startup()
 
-@api_view(['POST'])
+@api_view(['POST','GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def recommend(request):
@@ -63,7 +63,7 @@ def recommend(request):
 
 #POST /recommend/customer item id's to user 
 
-@api_view(['POST'])
+@api_view(['POST','GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def recommend_by_customer(request):
