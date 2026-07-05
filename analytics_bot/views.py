@@ -14,7 +14,7 @@ import analytics_bot.src.session as _sess
 
 from analytics_bot.src.pipeline import ask_retail_rag_ui    
 
-@api_view(['POST'])
+@api_view(['POST','GET'])
 def chat(request):
     question = request.data.get('question')
     print("question", question)
