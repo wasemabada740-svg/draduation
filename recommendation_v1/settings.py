@@ -28,6 +28,25 @@ DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
+CSRF_TRUSTED_ORIGINS = []
+csrf_trusted_origins_env = os.getenv('CSRF_TRUSTED_ORIGINS')
+if csrf_trusted_origins_env:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins_env.split(',') if origin.strip()]
+else:
+    for host in ALLOWED_HOSTS:
+        host = host.strip()
+        if host and host != '*':
+            if not host.startswith(('http://', 'https://')):
+                CSRF_TRUSTED_ORIGINS.append(f'https://{host}')
+                CSRF_TRUSTED_ORIGINS.append(f'http://{host}')
+            else:
+                CSRF_TRUSTED_ORIGINS.append(host)
+
+# Always trust the known Railway domain
+if 'https://draduation-production.up.railway.app' not in CSRF_TRUSTED_ORIGINS:
+    CSRF_TRUSTED_ORIGINS.append('https://draduation-production.up.railway.app')
+
+
 
 # Application definition
 
@@ -129,3 +148,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Security settings for production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
